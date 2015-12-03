@@ -1,0 +1,2 @@
+===OK===
+service-name ... some-username-and-password
