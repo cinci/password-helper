@@ -59,7 +59,7 @@ public class Processor {
 
         String data = new String(cryptService.decryptText(text, key));
         List<String> lines = cryptService.getXLines(data);
-        if (lines.size() > 1) {
+        if (lines.size() > 0) {
             lines.add(String.format(NEW_LINE, cfg.getServiceName(), cfg.getServiceValue()));
         }
 
