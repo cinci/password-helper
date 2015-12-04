@@ -9,6 +9,8 @@ import java.io.Console;
  */
 public class Application {
 
+    private static final String MASTER_FILE = "master-file.txt";
+
     public static void main(String[] args) {
         Application app = new Application();
 
@@ -20,14 +22,16 @@ public class Application {
         }
         String password = app.readPassword("Master password: ");
 
-        Configuration cfg = new Configuration(mode, serviceName, serviceValue, password);
+        Configuration cfg = new Configuration(mode, serviceName, serviceValue, password, MASTER_FILE);
         new Processor(cfg).run();
     }
 
     private String readServiceName() {
         Console console = getConsole();
         console.printf("Service name: ");
-        return console.readLine();
+        String value = console.readLine();
+
+        return value != null ? value : "";
     }
 
     private Mode readMode() {

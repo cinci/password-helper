@@ -10,10 +10,11 @@ Stores encrypted passwords in local file
 
 ## Usage
 
-- For first run select mode 'encrypt' and service name '1'
+- For first run select mode 'encrypt' with empty service name
 - Set master password - minimal length = 6 characters
 - File is encrypted with this password
 - Now it's possible to select read/add/delete/decrypt
 - e.g. 'read' mode and service name 'service-name'
+- when adding new service value input is masked so value is not visible
 - With each write operation backup file is created
-- For 'decrypt' mode (use service name '1') readable file is created in same folder
+- For 'decrypt' mode (use empty service name) readable file is created in same folder

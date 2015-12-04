@@ -41,7 +41,7 @@ public final class CryptService {
         return b.toString().getBytes();
     }
 
-    public List<String> getXLines(String data) {
+    public List<String> getContent(String data) {
         if (!data.startsWith(fileContentValidator)) {
             throw new RuntimeException("Invalid file content!");
         }

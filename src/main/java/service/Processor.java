@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * Created by jcincera on 01/12/15.
  */
 public class Processor {
-    private static final String MASTER_FILE = "master-file.txt";
+
     private static final String FILE_CONTENT_VALIDATOR = "===OK===";
     private static final String DIVIDER = " ... ";
     private static final String NEW_LINE = "%s" + DIVIDER + "%s";
@@ -21,7 +21,7 @@ public class Processor {
     public Processor(Configuration cfg) {
         this.cfg = cfg;
         cryptService = new CryptService(FILE_CONTENT_VALIDATOR);
-        fileService = new FileService(MASTER_FILE);
+        fileService = new FileService(cfg.getMasterFile());
     }
 
     public void run() {
@@ -58,7 +58,7 @@ public class Processor {
         fileService.backupMasterFile();
 
         String data = new String(cryptService.decryptText(text, key));
-        List<String> lines = cryptService.getXLines(data);
+        List<String> lines = cryptService.getContent(data);
         if (lines.size() > 0) {
             lines.add(String.format(NEW_LINE, cfg.getServiceName(), cfg.getServiceValue()));
         }
@@ -73,7 +73,7 @@ public class Processor {
         fileService.backupMasterFile();
 
         String data = new String(cryptService.decryptText(text, key));
-        List<String> lines = cryptService.getXLines(data);
+        List<String> lines = cryptService.getContent(data);
         if (lines.size() > 1) {
             lines = lines.stream().filter(l -> !l.split(DIVIDER)[0].equals(cfg.getServiceName())).collect(Collectors.toList());
         }
@@ -86,7 +86,7 @@ public class Processor {
 
     private void readService(byte[] text, String key) throws Exception {
         String data = new String(cryptService.decryptText(text, key));
-        cryptService.getXLines(data).stream().filter(l -> l.split(DIVIDER)[0].equals(cfg.getServiceName())).forEach(System.out::println);
+        cryptService.getContent(data).stream().filter(l -> l.split(DIVIDER)[0].equals(cfg.getServiceName())).forEach(System.out::println);
     }
 
     private void decryptFile(byte[] text, String key) throws Exception {

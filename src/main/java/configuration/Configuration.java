@@ -8,12 +8,14 @@ public class Configuration {
     private String serviceName;
     private String serviceValue;
     private String password;
+    private String masterFile;
 
-    public Configuration(Mode mode, String serviceName, String serviceValue, String password) {
+    public Configuration(Mode mode, String serviceName, String serviceValue, String password, String masterFile) {
         this.mode = mode;
         this.serviceName = serviceName;
         this.serviceValue = serviceValue;
         this.password = password;
+        this.masterFile = masterFile;
     }
 
     public Mode getMode() {
@@ -30,5 +32,9 @@ public class Configuration {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getMasterFile() {
+        return masterFile;
     }
 }
