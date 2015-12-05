@@ -51,7 +51,8 @@ public class Application {
         Console console = getConsole();
         console.printf(message);
         char[] password = console.readPassword();
-        return new String(password);
+
+        return password != null ? new String(password) : "";
     }
 
     private Console getConsole() {
