@@ -73,6 +73,31 @@ public class ReadModeTest extends AbstractTest {
     }
 
     @Test
+    public void verifyCorrectEmptyServiceValue() throws Exception {
+        encrypt("123456");
+        new Processor(cfg(Mode.ADD, "service 4 =", "abc 123", "123456")).run();
+        new Processor(cfg(Mode.ADD, "service-1", "abc 123", "123456")).run();
+        new Processor(cfg(Mode.ADD, "service 2", "", "123456")).run();
+        new Processor(cfg(Mode.ADD, "service 5 xxx", "", "123456")).run();
+        new Processor(cfg(Mode.ADD, "service 3 !@#$%^&*()_", "abc 123", "123456")).run();
+
+        new Processor(cfg(Mode.READ, "service-1", "", "123456")).run();
+        new Processor(cfg(Mode.READ, "service 5 xxx", "", "123456")).run();
+        new Processor(cfg(Mode.READ, "service 3 !@#$%^&*()_", "", "123456")).run();
+        new Processor(cfg(Mode.READ, "service 2", "", "123456")).run();
+        new Processor(cfg(Mode.READ, "service 4 =", "", "123456")).run();
+
+        switchToStandardOutput();
+        String output = tmpOut.toString();
+
+        assertTrue(output.contains("service-1 ### abc 123"));
+        assertTrue(output.contains("service 2 ### "));
+        assertTrue(output.contains("service 3 !@#$%^&*()_ ### abc 123"));
+        assertTrue(output.contains("service 4 = ### abc 123"));
+        assertTrue(output.contains("service 5 xxx ### "));
+    }
+
+    @Test
     public void verifyCorrectMultipleAddAndRead1() throws Exception {
         encrypt("123456");
         new Processor(cfg(Mode.ADD, "service-1", "abc 123", "123456")).run();
