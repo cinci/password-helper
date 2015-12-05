@@ -15,6 +15,6 @@ Stores encrypted passwords in local file
 - File is encrypted with this password
 - Now it's possible to select read/add/delete/decrypt
 - e.g. 'read' mode and service name 'service-name'
-- when adding new service value input is masked so value is not visible
+- Input for service value is masked so value is not visible
 - With each write operation backup file is created
 - For 'decrypt' mode (use empty service name) readable file is created in same folder
