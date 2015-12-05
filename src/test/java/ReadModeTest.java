@@ -9,8 +9,7 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by jcincera on 05/12/15.
@@ -38,6 +37,16 @@ public class ReadModeTest extends AbstractTest {
 
         String output = tmpOut.toString();
         assertEquals("service-name" + SPLIT_SEQUENCE + "some-username-and-password\n", output);
+    }
+
+    @Test
+    public void verifyUnknownServiceRead() throws Exception {
+        encrypt("123456");
+        new Processor(cfg(Mode.READ, "ABC123", "", "123456")).run();
+        switchToStandardOutput();
+
+        String output = tmpOut.toString();
+        assertFalse(output.contains("ABC123"));
     }
 
     @Test

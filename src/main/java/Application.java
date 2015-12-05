@@ -16,7 +16,7 @@ public class Application {
 
         Mode mode = app.readMode();
         String serviceName = app.readServiceName();
-        String serviceValue = null;
+        String serviceValue = "";
         if (mode.equals(Mode.ADD)) {
             serviceValue = app.readPassword("Service value: ");
         }
