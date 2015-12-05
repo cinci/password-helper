@@ -2,7 +2,7 @@
 
 Stores encrypted passwords in local file
 
-## Run
+## Setup
 
 - gradlew clean build
 - copy master-file.txt to same folder as password-helper-1.0-SNAPSHOT.jar (e.g. build/libs)
