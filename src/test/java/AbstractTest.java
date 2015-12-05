@@ -7,10 +7,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 /**
  * Created by jcincera on 04/12/15.
  */
 public class AbstractTest {
+    protected static final String SPLIT_SEQUENCE = " ### ";
     protected static final String FILE_CONTENT_VALIDATOR = "===OK===";
     protected static final String MASTER_FILE = "master-file.txt";
     protected static final String TEST_MASTER_FILE = "test-master-file.txt";
@@ -38,6 +42,16 @@ public class AbstractTest {
     protected void addServices(Integer number) {
         for (int i = 0; i < number; i++) {
             new Processor(cfg(Mode.ADD, "new-service-" + i, "service-password-" + i, "123456")).run();
+        }
+    }
+
+    protected void assertEqualsFiles(byte[] expected, byte[] actual) {
+        if (expected.length != actual.length) {
+            assertFalse("Modified", true);
+        }
+
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], actual[i]);
         }
     }
 }

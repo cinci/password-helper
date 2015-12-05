@@ -1,2 +1,2 @@
 ===OK===
-service-name ... some-username-and-password
+service-name ### some-username-and-password

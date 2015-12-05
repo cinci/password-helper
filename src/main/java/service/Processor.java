@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class Processor {
 
     private static final String FILE_CONTENT_VALIDATOR = "===OK===";
-    private static final String DIVIDER = " ... ";
-    private static final String NEW_LINE = "%s" + DIVIDER + "%s";
+    private static final String SPLIT_SEQUENCE = " ### ";
+    private static final String NEW_LINE = "%s" + SPLIT_SEQUENCE + "%s";
 
     private Configuration cfg;
     private CryptService cryptService;
@@ -26,6 +26,11 @@ public class Processor {
 
     public void run() {
         try {
+            if (cfg.getServiceName().contains(SPLIT_SEQUENCE) || cfg.getServiceValue().contains(SPLIT_SEQUENCE)) {
+                System.out.println("Service name/value is not supported");
+                throw new RuntimeException("Invalid service name/value");
+            }
+
             byte[] masterFileContent = fileService.readFileContent();
             String masterKey = cryptService.formatKey(cfg.getPassword());
 
@@ -50,7 +55,6 @@ public class Processor {
         catch (Exception e) {
             //System.out.println(e.getClass().getSimpleName() + " - " + e.getMessage());
             System.out.println("Invalid!");
-            System.exit(1);
         }
     }
 
@@ -75,7 +79,7 @@ public class Processor {
         String data = new String(cryptService.decryptText(text, key));
         List<String> lines = cryptService.getContent(data);
         if (lines.size() > 1) {
-            lines = lines.stream().filter(l -> !l.split(DIVIDER)[0].equals(cfg.getServiceName())).collect(Collectors.toList());
+            lines = lines.stream().filter(l -> !l.split(SPLIT_SEQUENCE)[0].equals(cfg.getServiceName())).collect(Collectors.toList());
         }
 
         byte[] newContent = cryptService.convertToBytes(lines);
@@ -86,7 +90,7 @@ public class Processor {
 
     private void readService(byte[] text, String key) throws Exception {
         String data = new String(cryptService.decryptText(text, key));
-        cryptService.getContent(data).stream().filter(l -> l.split(DIVIDER)[0].equals(cfg.getServiceName())).forEach(System.out::println);
+        cryptService.getContent(data).stream().filter(l -> l.split(SPLIT_SEQUENCE)[0].equals(cfg.getServiceName())).forEach(System.out::println);
     }
 
     private void decryptFile(byte[] text, String key) throws Exception {
