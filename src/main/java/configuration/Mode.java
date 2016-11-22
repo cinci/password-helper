@@ -9,7 +9,8 @@ public enum Mode {
     DELETE("delete"),
     READ("read"),
     ENCRYPT("encrypt"),
-    DECRYPT("decrypt");
+    DECRYPT("decrypt"),
+    LIST("list");
 
     private String value;
 

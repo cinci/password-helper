@@ -36,7 +36,7 @@ public class Application {
 
     private Mode readMode() {
         Console console = getConsole();
-        console.printf("Mode (read/add/delete/encrypt/decrypt): ");
+        console.printf("Mode (read/add/delete/encrypt/decrypt/list): ");
         Mode mode = Mode.fromValue(console.readLine());
 
         if (mode == null) {

@@ -50,6 +50,9 @@ public class Processor {
                 case DELETE:
                     deleteService(masterFileContent, masterKey);
                     break;
+                case LIST:
+                    listServices(masterFileContent, masterKey);
+                    break;
             }
         }
         catch (Exception e) {
@@ -103,5 +106,10 @@ public class Processor {
         fileService.backupMasterFile();
         byte[] encrypted = cryptService.encryptText(text, key);
         fileService.storeNewMasterFile(encrypted);
+    }
+
+    private void listServices(byte[] text, String key) throws Exception {
+        String data = new String(cryptService.decryptText(text, key));
+        cryptService.getContent(data).forEach(l -> System.out.println(l.split(SPLIT_SEQUENCE)[0]));
     }
 }
