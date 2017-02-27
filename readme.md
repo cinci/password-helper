@@ -4,17 +4,20 @@ Stores encrypted passwords in local file
 
 ## Setup
 
-- gradlew clean build
-- copy master-file.txt to same folder as password-helper-1.0-SNAPSHOT.jar (e.g. build/libs)
-- java -cp password-helper-1.0-SNAPSHOT.jar Application
+```
+./gradlew clean build initApp
+```
+
+```
+cd build/app
+java -cp password-helper-1.1.jar Application
+```
 
 ## Usage
 
-- For first run select mode 'encrypt' with empty service name
+- For first run select mode 'encrypt'
 - Set master password - minimal length = 6 characters
 - File is encrypted with this password
-- Now it's possible to select read/add/delete/decrypt/list
-- e.g. 'read' mode and service name 'service-name'
+- After that it's possible to select read/add/delete/decrypt/list service
 - Input for service value is masked so value is not visible
-- With each write operation backup file is created
-- For 'decrypt' mode (use empty service name) readable file is created in same folder
+- 'decrypt' mode creates readable file

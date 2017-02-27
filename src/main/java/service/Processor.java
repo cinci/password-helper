@@ -15,12 +15,12 @@ public class Processor {
     private static final String NEW_LINE = "%s" + SPLIT_SEQUENCE + "%s";
 
     private Configuration cfg;
-    private CryptService cryptService;
+    private CryptoService cryptoService;
     private FileService fileService;
 
     public Processor(Configuration cfg) {
         this.cfg = cfg;
-        cryptService = new CryptService(FILE_CONTENT_VALIDATOR);
+        cryptoService = new CryptoService(FILE_CONTENT_VALIDATOR);
         fileService = new FileService(cfg.getMasterFile());
     }
 
@@ -32,7 +32,7 @@ public class Processor {
             }
 
             byte[] masterFileContent = fileService.readFileContent();
-            String masterKey = cryptService.formatKey(cfg.getPassword());
+            String masterKey = cryptoService.formatKey(cfg.getPassword());
 
             switch (cfg.getMode()) {
                 case ENCRYPT:
@@ -57,59 +57,53 @@ public class Processor {
         }
         catch (Exception e) {
             //System.out.println(e.getClass().getSimpleName() + " - " + e.getMessage());
-            System.out.println("Invalid!");
+            System.out.println("Invalid input!");
         }
     }
 
     private void addService(byte[] text, String key) throws Exception {
-        fileService.backupMasterFile();
-
-        String data = new String(cryptService.decryptText(text, key));
-        List<String> lines = cryptService.getContent(data);
+        String data = new String(cryptoService.decryptText(text, key));
+        List<String> lines = cryptoService.getContent(data);
         if (lines.size() > 0) {
             lines.add(String.format(NEW_LINE, cfg.getServiceName(), cfg.getServiceValue()));
         }
 
-        byte[] newContent = cryptService.convertToBytes(lines);
-        byte[] encrypted = cryptService.encryptText(newContent, key);
+        byte[] newContent = cryptoService.convertToBytes(lines);
+        byte[] encrypted = cryptoService.encryptText(newContent, key);
 
         fileService.storeNewMasterFile(encrypted);
     }
 
     private void deleteService(byte[] text, String key) throws Exception {
-        fileService.backupMasterFile();
-
-        String data = new String(cryptService.decryptText(text, key));
-        List<String> lines = cryptService.getContent(data);
+        String data = new String(cryptoService.decryptText(text, key));
+        List<String> lines = cryptoService.getContent(data);
         if (lines.size() > 1) {
             lines = lines.stream().filter(l -> !l.split(SPLIT_SEQUENCE)[0].equals(cfg.getServiceName())).collect(Collectors.toList());
         }
 
-        byte[] newContent = cryptService.convertToBytes(lines);
-        byte[] encrypted = cryptService.encryptText(newContent, key);
+        byte[] newContent = cryptoService.convertToBytes(lines);
+        byte[] encrypted = cryptoService.encryptText(newContent, key);
 
         fileService.storeNewMasterFile(encrypted);
     }
 
     private void readService(byte[] text, String key) throws Exception {
-        String data = new String(cryptService.decryptText(text, key));
-        cryptService.getContent(data).stream().filter(l -> l.split(SPLIT_SEQUENCE)[0].equals(cfg.getServiceName())).forEach(System.out::println);
+        String data = new String(cryptoService.decryptText(text, key));
+        cryptoService.getContent(data).stream().filter(l -> l.split(SPLIT_SEQUENCE)[0].equals(cfg.getServiceName())).forEach(System.out::println);
     }
 
     private void decryptFile(byte[] text, String key) throws Exception {
-        fileService.backupMasterFile();
-        byte[] decrypted = cryptService.decryptText(text, key);
+        byte[] decrypted = cryptoService.decryptText(text, key);
         fileService.storeNewMasterFile(decrypted);
     }
 
     private void encryptFile(byte[] text, String key) throws Exception {
-        fileService.backupMasterFile();
-        byte[] encrypted = cryptService.encryptText(text, key);
+        byte[] encrypted = cryptoService.encryptText(text, key);
         fileService.storeNewMasterFile(encrypted);
     }
 
     private void listServices(byte[] text, String key) throws Exception {
-        String data = new String(cryptService.decryptText(text, key));
-        cryptService.getContent(data).forEach(l -> System.out.println(l.split(SPLIT_SEQUENCE)[0]));
+        String data = new String(cryptoService.decryptText(text, key));
+        cryptoService.getContent(data).forEach(l -> System.out.println(l.split(SPLIT_SEQUENCE)[0]));
     }
 }

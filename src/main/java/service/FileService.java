@@ -18,12 +18,8 @@ public final class FileService {
     public void storeNewMasterFile(byte[] data) throws IOException, InterruptedException {
         Thread.sleep(100);
         Files.move(Paths.get(masterFile), Paths.get(masterFile + "_" + System.currentTimeMillis()));
-        Files.write(Paths.get(masterFile), data);
-    }
-
-    public void backupMasterFile() throws IOException, InterruptedException {
         Thread.sleep(100);
-        Files.copy(Paths.get(masterFile), Paths.get(masterFile + "_" + System.currentTimeMillis()));
+        Files.write(Paths.get(masterFile), data);
     }
 
     public byte[] readFileContent() {
